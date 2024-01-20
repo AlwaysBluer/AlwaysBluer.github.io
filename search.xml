@@ -1,6 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Next主题定制优化</title>
+    <url>/2024/01/20/Next%E4%B8%BB%E9%A2%98%E5%AE%9A%E5%88%B6%E4%BC%98%E5%8C%96/</url>
+    <content><![CDATA[<p>博客内容主要参考 <a href="https://choubin.site/2019/12/30/CustomBlogTheme/">Next主题定制优化</a></p>
+<h1 id="站点优化"><a href="#站点优化" class="headerlink" title="站点优化"></a>站点优化</h1><h2 id="生成标签、分类、归档页面"><a href="#生成标签、分类、归档页面" class="headerlink" title="生成标签、分类、归档页面"></a>生成标签、分类、归档页面</h2><p>主题首页的默认页面中是没有标签、分类、归档页面的，需要手动生成一下。先在博客根目录下打开<code>git-bash</code>或终端，然后键入以下命令</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo new page tags &amp;&amp; hexo new page categories &amp;&amp; hexo new page archives</span><br></pre></td></tr></table></figure>
+
+<p>然后打开新增的<code>source/tags/index.md</code>，修改如下</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">  title: 标签</span><br><span class="line">  date: 2018-10-19 22:57:00</span><br><span class="line"><span class="bullet">+</span> type: tags</span><br></pre></td></tr></table></figure>
+
+<p>同理再修改另外两个新增文件夹下的<code>index.md</code>。</p>
+<p>最后修改主题配置文件的<code>menu</code>字段</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">menu:</span><br><span class="line">  home: / || home</span><br><span class="line">  about: /about/ || user</span><br><span class="line"><span class="bullet">+</span> tags: /tags/ || tags</span><br><span class="line"><span class="bullet">+</span> categories: /categories/ || th</span><br><span class="line"><span class="bullet">+</span> archives: /archives/ || archive</span><br></pre></td></tr></table></figure>
+
+<h2 id="文章摘要显示"><a href="#文章摘要显示" class="headerlink" title="文章摘要显示"></a>文章摘要显示</h2><p>默认的主题配置里，首页会显示每一篇文章的全文，如果想只显示文章摘要，对主题配置文件做如下更改</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">excerpt<span class="emphasis">_description: true</span></span><br></pre></td></tr></table></figure>
+
+<p>用户可以在文章中通过<code>&lt;!-- more --&gt;</code>标记来精确划分摘要信息，标记之前的段落将作为摘要显示在首页。</p>
+<p>如果在文章的 Front-Matter 中有非空的 <code>description</code> 字段，则该字段的内容会被作为摘要显示在首页。</p>
+<h2 id="修改网站-Favicon"><a href="#修改网站-Favicon" class="headerlink" title="修改网站 Favicon"></a>修改网站 Favicon</h2><p>Favicon 即浏览器标签左侧的图标。下载自己喜欢的图标置于 <code>themes\next\source\images\</code> 目录下，命名方式参考主题配置文件中的 <code>favicon</code> 字段。 这里介绍一个<a href="https://tool.lu/favicon/">在线制作 <code>favicon</code>的网站</a>，可以上传喜欢的图片制作成<code>favicon</code>。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">small: /images/favicon-16x16-next.png  # 小图标</span><br><span class="line">medium: /images/favicon-32x32-next.png  # 大图标</span><br><span class="line">apple_touch_icon: /images/apple-touch-icon-next.png  # 苹果图标</span><br><span class="line">safari_pinned_tab: /images/logo.svg  # safari浏览器标签页图标</span><br><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<h2 id="添加版权协议"><a href="#添加版权协议" class="headerlink" title="添加版权协议"></a>添加版权协议</h2><p>在主题配置文件中开启相关字段</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">creative_commons: by-nc-sa</span><br></pre></td></tr></table></figure>
+
+<h1 id="主题优化"><a href="#主题优化" class="headerlink" title="主题优化"></a>主题优化</h1><h2 id="取消文章目录的数字编号"><a href="#取消文章目录的数字编号" class="headerlink" title="取消文章目录的数字编号"></a>取消文章目录的数字编号</h2><p>主题配置文件中修改</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">toc:</span><br><span class="line">  number: false  # 关闭目录中的数字编号</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="修改文章-meta-信息"><a href="#修改文章-meta-信息" class="headerlink" title="修改文章 meta 信息"></a>修改文章 meta 信息</h2><p>默认主题下， 标题下方会显示文章的创建时间、文章的修改时间、文章分类信息等元数据，用户可以在主题配置文件中自定义设置需要显示的 meta 元信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">post_meta:</span><br><span class="line">  item_text: true  # 显示文字说明</span><br><span class="line">  created_at: true  # 显示文章创建时间</span><br><span class="line">  updated_at:</span><br><span class="line">    enabled: false  # 隐藏文章修改时间</span><br><span class="line">    another_day: true  # 只有当修改时间和创建时间不是同一天的时候才显示</span><br><span class="line">  categories: false  # 隐藏分类信息</span><br></pre></td></tr></table></figure>
+
+<h2 id="页面加载进度条"><a href="#页面加载进度条" class="headerlink" title="页面加载进度条"></a>页面加载进度条</h2><p>当网络不好的时候可能会在打开站点或跳转文章时出现短暂的白屏，此时如果能有加载进度提示将会提高用户操作体验。</p>
+<p>在NexT根目录下执行以下命令安装相关依赖：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ git clone https://github.com/theme-next/theme-next-pace themes/next/source/lib/pace</span><br></pre></td></tr></table></figure>
+
+<p>在主题配置文件中设置 <code>pace: true</code>。</p>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Configuration</tag>
+        <tag>Next</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hexo搭建个人博客</title>
     <url>/2024/01/19/Build-Blog-Site-with-Hexo/</url>
     <content><![CDATA[<h1 id="什么是hexo"><a href="#什么是hexo" class="headerlink" title="什么是hexo"></a><strong>什么是hexo</strong></h1><blockquote>
@@ -177,7 +224,7 @@
 <p>安装成功后输入</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo clean </span><br><span class="line">hexo g </span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure>
 
-<p>这三条命令将刚才测试生成的静态文件删除，并生成新的文件，部署到github仓库页面，这时可以通过访问 <code>username.github.io</code>访问博客主页。</p>
+<p>这三条命令将刚才测试生成的静态文件删除，并生成新的文件，部署到github仓库页面，这时可以通过访问 <code>username.github.io</code>访问博客主页，部署后要等几分钟才会生效。</p>
 <h1 id="NEXT主题配置"><a href="#NEXT主题配置" class="headerlink" title="NEXT主题配置"></a>NEXT主题配置</h1><ul>
 <li>在终端窗口下，定位到 Hexo 站点目录下。使用 <code>Git</code> checkout 代码：</li>
 </ul>
@@ -202,7 +249,7 @@
 <li>需要将next配置文件中语言设置更改为<code>zh-CN</code>使得hexo能读取menu翻译文本</li>
 </ul>
 <p>其他更详细的第三方设置可参考 <a href="https://theme-next.iissnan.com/getting-started.html">Next中文文档</a></p>
-<h1 id="图床"><a href="#图床" class="headerlink" title="图床"></a>图床</h1><p>当博文中有图片时，若是少量图片，可以直接把图片存放在source文件夹中，但这显然不合理的，因为图片会占据大量的存储的空间，加载的时候相对缓慢 ，这时考虑把博文里的图片上传到某一网站，然后获得外部链接，使用Markdown语法，**<img src="/%E5%A4%96%E9%83%A8%E9%93%BE%E6%8E%A5" alt="图片信息">** 完成图片的插入，这种网站就被成为图床。</p>
+<h1 id="图床"><a href="#图床" class="headerlink" title="图床"></a>图床</h1><p>当博文中有图片时，若是少量图片，可以直接把图片存放在source文件夹中，但这显然不合理的，因为图片会占据大量的存储的空间，加载的时候相对缓慢 ，这时考虑把博文里的图片上传到某一网站，然后获得外部链接，使用Markdown语法，完成图片的插入，这种网站就被成为图床。</p>
 <p>阿里云是目前中国最大的云服务提供商，其提供的OSS服务可以满足我们的需求。</p>
 <p>PicGo能快速上传图片并获取图片URL，结合Typora图像设置可以使得本地图片插入到文档后立刻上传并保存到OSS bucket中</p>
 <p>PicGo中，我们需要设置KeyId, KeySecret，Bucket等信息，这些都是在阿里云获得</p>
