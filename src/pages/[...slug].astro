@@ -1,0 +1,69 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { formatDate, getPublishedPosts, postUrl, termSlug, type Post } from '../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  return posts.map((post, index) => ({
+    params: { slug: post.data.path.replace(/^\/+|\/+$/g, '') },
+    props: {
+      post,
+      newer: index > 0 ? posts[index - 1] : undefined,
+      older: index < posts.length - 1 ? posts[index + 1] : undefined,
+    },
+  }));
+}
+
+interface Props {
+  post: Post;
+  newer?: Post;
+  older?: Post;
+}
+
+const { post, newer, older } = Astro.props;
+const { Content, headings } = await render(post);
+const toc = headings.filter((heading) => heading.depth <= 3);
+---
+
+<BaseLayout title={`${post.data.title} | AlwaysBluer`} description={post.data.description}>
+  <article class="article page-shell">
+    <header class="article-header">
+      <a class="article-header__category" href={`/categories/${encodeURIComponent(post.data.category)}/`}>
+        {post.data.category}
+      </a>
+      <h1>{post.data.title}</h1>
+      <p>{post.data.description}</p>
+      <div class="article-header__meta">
+        <time datetime={post.data.publishedAt.toISOString()}>发布于 {formatDate(post.data.publishedAt)}</time>
+        {post.data.updatedAt && <time datetime={post.data.updatedAt.toISOString()}>更新于 {formatDate(post.data.updatedAt)}</time>}
+      </div>
+      <div class="article-header__tags">
+        {post.data.tags.map((tag) => (
+          <a href={`/tags/${encodeURIComponent(termSlug(tag))}/`}>#{tag}</a>
+        ))}
+      </div>
+    </header>
+
+    <div class:list={['article-grid', { 'article-grid--no-toc': toc.length === 0 }]}>
+      {toc.length > 0 && (
+        <aside class="toc" aria-label="文章目录">
+          <p>文章目录</p>
+          <ol>
+            {toc.map((heading) => (
+              <li class={`toc__depth-${heading.depth}`}><a href={`#${heading.slug}`}>{heading.text}</a></li>
+            ))}
+          </ol>
+        </aside>
+      )}
+      <div class="prose">
+        <Content />
+      </div>
+    </div>
+
+    <nav class="post-nav" aria-label="相邻文章">
+      {older ? <a href={postUrl(older)}><span>上一篇</span>{older.data.title}</a> : <span />}
+      {newer ? <a href={postUrl(newer)}><span>下一篇</span>{newer.data.title}</a> : <span />}
+    </nav>
+  </article>
+</BaseLayout>

@@ -1,0 +1,59 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostList from '../components/PostList.astro';
+import { focusAreas, site } from '../data/site';
+import { getPublishedPosts } from '../lib/posts';
+
+const posts = await getPublishedPosts();
+---
+
+<BaseLayout>
+  <section class="home-hero page-shell">
+    <div class="home-hero__title">
+      <p class="home-hero__signal" aria-hidden="true">{site.mark}</p>
+      <h1>Always<br />Bluer</h1>
+    </div>
+    <div class="home-hero__intro">
+      <p class="home-hero__lede">{site.thesis}</p>
+      <p>{site.introduction}</p>
+      <dl class="home-stats">
+        <div><dt>文章</dt><dd>{String(posts.length).padStart(2, '0')}</dd></div>
+        <div><dt>技术主线</dt><dd>{String(focusAreas.length).padStart(2, '0')}</dd></div>
+        <div><dt>验证标准</dt><dd>3×</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="focus-preview page-shell" aria-labelledby="focus-heading">
+    <div class="section-heading section-heading--with-note">
+      <div>
+        <h2 id="focus-heading">现在关注</h2>
+        <p>围绕同一个问题：怎样让复杂的 Agent 系统真正可改、可跑、可评。</p>
+      </div>
+      <a href="/now/">查看技术地图</a>
+    </div>
+    <ol class="focus-list">
+      {focusAreas.map((area) => (
+        <li>
+          <div class="focus-list__code" aria-hidden="true">{area.code}</div>
+          <div class="focus-list__body">
+            <p>{area.state}</p>
+            <h3>{area.title}</h3>
+            <p>{area.description}</p>
+          </div>
+          <ul aria-label={`${area.title} 关键词`}>
+            {area.questions.map((question) => <li>{question}</li>)}
+          </ul>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="journal page-shell" aria-labelledby="latest-heading">
+    <div class="section-heading">
+      <h2 id="latest-heading">最近文章</h2>
+      <a href="/archives/">查看全部</a>
+    </div>
+    <PostList posts={posts.slice(0, 6)} />
+  </section>
+</BaseLayout>

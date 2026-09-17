@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { focusAreas, site, validationLoop, writingThreads } from '../data/site';
+---
+
+<BaseLayout title={`正在做 | ${site.name}`} description="AlwaysBluer 当前关注的技术方向与写作线索。">
+  <section class="now-page page-shell">
+    <header class="page-intro">
+      <p>持续更新</p>
+      <h1>正在做</h1>
+      <span>{focusAreas.length} 条主线</span>
+    </header>
+
+    <div class="now-statement">
+      <p>{site.thesis}</p>
+      <p>我把研究重点公开在这里。它既是一张技术地图，也是之后选择文章主题的约束：优先记录能形成方法、证据或复现实验的内容。</p>
+    </div>
+
+    <section class="now-section" aria-labelledby="directions-heading">
+      <div class="section-heading">
+        <h2 id="directions-heading">技术主线</h2>
+      </div>
+      <ol class="focus-list focus-list--detail">
+        {focusAreas.map((area) => (
+          <li>
+            <div class="focus-list__code" aria-hidden="true">{area.code}</div>
+            <div class="focus-list__body">
+              <p>{area.state}</p>
+              <h3>{area.title}</h3>
+              <p>{area.description}</p>
+            </div>
+            <ul aria-label={`${area.title} 关键词`}>
+              {area.questions.map((question) => <li>{question}</li>)}
+            </ul>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="now-section" aria-labelledby="validation-heading">
+      <div class="section-heading section-heading--with-note">
+        <div>
+          <h2 id="validation-heading">自动优化的最低条件</h2>
+          <p>指标变好只是信号，不是接受候选的理由。</p>
+        </div>
+      </div>
+      <ol class="validation-loop">
+        {validationLoop.map((item, index) => (
+          <li>
+            <span>{index + 1}</span>
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="now-section" aria-labelledby="threads-heading">
+      <div class="section-heading section-heading--with-note">
+        <div>
+          <h2 id="threads-heading">写作线索</h2>
+          <p>不是承诺列表；它记录值得继续验证和写清楚的问题。</p>
+        </div>
+      </div>
+      <ul class="writing-threads">
+        {writingThreads.map((thread) => <li>{thread}</li>)}
+      </ul>
+    </section>
+  </section>
+</BaseLayout>

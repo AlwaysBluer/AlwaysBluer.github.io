@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPublishedPosts } from '../../lib/posts';
+
+const posts = await getPublishedPosts();
+const counts = posts.reduce((map, post) => {
+  map.set(post.data.category, (map.get(post.data.category) ?? 0) + 1);
+  return map;
+}, new Map<string, number>());
+---
+
+<BaseLayout title="分类 | AlwaysBluer" description="按分类浏览 AlwaysBluer 的文章。">
+  <section class="listing-page page-shell">
+    <header class="page-intro">
+      <p>内容目录</p>
+      <h1>分类</h1>
+      <span>{counts.size} 个分类</span>
+    </header>
+    <ul class="term-grid">
+      {[...counts.entries()].map(([category, count]) => (
+        <li><a href={`/categories/${encodeURIComponent(category)}/`}><span>{category}</span><strong>{count}</strong></a></li>
+      ))}
+    </ul>
+  </section>
+</BaseLayout>

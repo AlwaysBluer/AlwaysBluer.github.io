@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostList from '../../components/PostList.astro';
+import { getPublishedPosts } from '../../lib/posts';
+
+const posts = await getPublishedPosts();
+---
+
+<BaseLayout title="文章归档 | AlwaysBluer" description="AlwaysBluer 的全部文章。">
+  <section class="listing-page page-shell">
+    <header class="page-intro">
+      <p>从新到旧</p>
+      <h1>文章归档</h1>
+      <span>共 {posts.length} 篇</span>
+    </header>
+    <PostList posts={posts} />
+  </section>
+</BaseLayout>

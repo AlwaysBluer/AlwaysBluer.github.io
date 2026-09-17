@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PostList from '../../../components/PostList.astro';
+import { getPublishedPosts, termSlug, type Post } from '../../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  const tags = [...new Set(posts.flatMap((post) => post.data.tags))];
+  return tags.map((tag) => ({
+    params: { tag: termSlug(tag) },
+    props: { tag, posts: posts.filter((post) => post.data.tags.includes(tag)) },
+  }));
+}
+
+interface Props { tag: string; posts: Post[] }
+const { tag, posts } = Astro.props;
+---
+
+<BaseLayout title={`#${tag} | AlwaysBluer`} description={`标签 ${tag} 下的文章。`}>
+  <section class="listing-page page-shell">
+    <header class="page-intro">
+      <p>标签</p>
+      <h1>#{tag}</h1>
+      <span>{posts.length} 篇文章</span>
+    </header>
+    <PostList posts={posts} />
+  </section>
+</BaseLayout>

@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { formatDate, getPublishedPosts, postUrl } from '../lib/posts';
+
+const posts = await getPublishedPosts();
+---
+
+<BaseLayout title="搜索 | AlwaysBluer" description="搜索 AlwaysBluer 的文章。">
+  <section class="search-page page-shell">
+    <header class="page-intro">
+      <p>文章索引</p>
+      <h1>搜索</h1>
+    </header>
+    <label class="search-box">
+      <span>搜索标题、摘要、分类或标签</span>
+      <input id="search-input" type="search" placeholder="例如：Hexo" autocomplete="off" />
+    </label>
+    <p id="search-count" class="search-count" aria-live="polite">共 {posts.length} 篇文章</p>
+    <ol id="search-results" class="search-results">
+      {posts.map((post) => (
+        <li data-search={`${post.data.title} ${post.data.description} ${post.data.category} ${post.data.tags.join(' ')}`.toLowerCase()}>
+          <time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time>
+          <a href={postUrl(post)}>{post.data.title}</a>
+          <p>{post.data.description}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <script>
+    const input = document.querySelector<HTMLInputElement>('#search-input');
+    const count = document.querySelector<HTMLElement>('#search-count');
+    const items = [...document.querySelectorAll<HTMLElement>('#search-results > li')];
+    input?.addEventListener('input', () => {
+      const query = input.value.trim().toLowerCase();
+      let visible = 0;
+      for (const item of items) {
+        const match = !query || item.dataset.search?.includes(query);
+        item.hidden = !match;
+        if (match) visible += 1;
+      }
+      if (count) count.textContent = query ? `找到 ${visible} 篇文章` : `共 ${visible} 篇文章`;
+    });
+  </script>
+</BaseLayout>

@@ -1,0 +1,14 @@
+---
+import { site } from '../data/site';
+---
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <p>用证据缩短从 badcase 到 fix 的距离。</p>
+    <div class="site-footer__meta">
+      <span>© {new Date().getFullYear()} {site.name}</span>
+      <a href="/rss.xml">RSS</a>
+      <a href={site.repository} target="_blank" rel="noreferrer">源码</a>
+    </div>
+  </div>
+</footer>
