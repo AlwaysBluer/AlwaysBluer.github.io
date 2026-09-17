@@ -4,6 +4,14 @@
 
 ## 本地运行
 
+项目运行时固定为 Node.js 24；如果使用 mise：
+
+```bash
+mise install
+```
+
+然后安装依赖并启动：
+
 ```bash
 npm install
 npm run dev
